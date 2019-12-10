@@ -1,7 +1,7 @@
-/.vs
+.vs/
 obj/
 bin/
-/packages
+packages/
 settings
 *.DotSettings.user
 /.idea
