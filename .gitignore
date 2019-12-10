@@ -2,7 +2,7 @@
 obj/
 bin/
 packages/
-settings
+settings/
 *.DotSettings.user
-/.idea
+.idea/
 *.orig
