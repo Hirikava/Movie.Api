@@ -14,7 +14,8 @@ namespace Movie.Api.Controllers
         {
             return new List<Models.Movie>()
             {
-                new Models.Movie(){Name = "AAAA",AgeLimitation = 0,Genres = new List<MovieGenre>() {MovieGenre.Horror,MovieGenre.Adventure}}
+                new Models.Movie(){Name = "Страх и ненависть в Самаре"},
+                new Models.Movie(){Name = "Город под подошвой",AgeLimitation = 0,Genres = new List<MovieGenre>() {MovieGenre.Horror,MovieGenre.Adventure}}
             };
         }
     }
