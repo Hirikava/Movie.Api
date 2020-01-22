@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Product App</title>
+</head>
+<body>
+
+    <div>
+    </div>
+    <div>
+        <h2>Registration</h2>
+        <input type="text" id="userName" size="20" />
+        <input type="text" id="userPassword" size="20" />
+        <input type="button" value="Register" onclick="Register();" />
+        <p id="movie" />
+</div>
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function Register() {
+        $.ajax({
+            type: "POST",
+            url: "v1/auth",
+            data: {
+                userName : $('#userName').val(),
+                passwordHash : $('#userPassword').val()
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+
+        });
+    }
+
+    function successFunc(data, status) {
+        alert(data.Sid);
+    }
+
+    function errorFunc(jqXHR) {
+        alert(jqXHR.responseText);
+    }
+</script>
+</body>
+</html>
