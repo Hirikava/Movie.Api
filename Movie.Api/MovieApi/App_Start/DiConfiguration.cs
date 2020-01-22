@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
-using Movie.Api.Providers;
 
 namespace Movie.Api.App_Start
 {
@@ -19,9 +18,6 @@ namespace Movie.Api.App_Start
 
             //DI Registrations here
 
-            builder.Register(c => new MovieProvider())
-                .As<IMovieProvider>()
-                .InstancePerRequest();
 
             //
 
