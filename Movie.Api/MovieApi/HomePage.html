@@ -7,6 +7,7 @@
 
 <div>
     <h2>All MoviesToday</h2>
+    <p id="userIdentity"></p>
     <ul id="movies" />
 </div>
 <div>
@@ -22,29 +23,18 @@
 
     $(document).ready(function () {
         // Send an AJAX request
-        $.getJSON(uri)
-            .done(function (data) {
-                // On success, 'data' contains a list of products.
-                $.each(data, function (key, item) {
-                    // Add a list item for the product.
-                    $('<li>', { text: formatItem(item) }).appendTo($('#movies'));
-                });
-            });
+        if (getCookie("sid")) {
+
+        } else {
+            $('<a>', {text: "войти или зарегистрироваться", href : "RegistrationPage.html"}).appendTo($('#userIdentity'));
+        }
     });
 
-    function formatItem(item) {
-        return item.Name;
-    }
-
-    function find() {
-        var id = $('#prodId').val();
-        $.getJSON(uri + '/' + id)
-            .done(function (data) {
-                $('#product').text(formatItem(data));
-            })
-            .fail(function (jqXHR, textStatus, err) {
-                $('#product').text('Error: ' + err);
-            });
+    function getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 </script>
 </body>
