@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Movie.Api.Models;
+using Movie.Api.Providers;
 
 namespace Movie.Api.Controllers
 {
@@ -8,15 +9,18 @@ namespace Movie.Api.Controllers
     public class MovieController : ApiController
     {
 
+        private readonly IMovieProvider movieProvider;
+
+        public MovieController(IMovieProvider movieProvider)
+        {
+            this.movieProvider = movieProvider;
+        }
+
         [HttpGet]
         [Route("")]
-        public List<Models.Movie> GetMovies()
+        public IEnumerable<Models.Movie> GetMovies()
         {
-            return new List<Models.Movie>()
-            {
-                new Models.Movie(){Name = "Страх и ненависть в Самаре"},
-                new Models.Movie(){Name = "Город под подошвой",AgeLimitation = 0,Genres = new List<MovieGenre>() {MovieGenre.Horror,MovieGenre.Adventure}}
-            };
+            return movieProvider.GetMovies();
         }
     }
 }
