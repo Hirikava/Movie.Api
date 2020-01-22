@@ -20,13 +20,14 @@
 <script type="text/javascript">
 
     function Register() {
+        var data = {
+            "UserName": $('#userName').val(),
+            "PasswordHash": $('#userPassword').val()
+        };
         $.ajax({
             type: "POST",
             url: "v1/auth",
-            data: {
-                userName : $('#userName').val(),
-                passwordHash : $('#userPassword').val()
-            },
+            data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: successFunc,
