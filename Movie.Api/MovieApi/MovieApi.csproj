@@ -105,8 +105,10 @@
     <Compile Include="App_Start\DiConfiguration.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Clients\IUsersClient.cs" />
-    <Compile Include="Clients\UsersClient.cs" />
+    <Compile Include="Clients\Sessions\ISessionsClient.cs" />
+    <Compile Include="Clients\Sessions\SessionsClient.cs" />
+    <Compile Include="Clients\User\IUsersClient.cs" />
+    <Compile Include="Clients\User\UsersClient.cs" />
     <Compile Include="Controllers\AuthorizationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
