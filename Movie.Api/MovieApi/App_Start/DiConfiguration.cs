@@ -7,6 +7,7 @@ using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Movie.Api.Clients;
+using Movie.Api.Clients.Sessions;
 using Movie.Api.Providers.DataBase;
 
 namespace Movie.Api.App_Start
@@ -28,7 +29,9 @@ namespace Movie.Api.App_Start
                 .As<IUsersClient>()
                 .InstancePerRequest();
 
-            
+            builder.Register(c => new SessionsClient(c.Resolve<IDataBaseConnectionProvider>()))
+                .As<ISessionsClient>()
+                .InstancePerRequest();
             //
 
             var container = builder.Build();
