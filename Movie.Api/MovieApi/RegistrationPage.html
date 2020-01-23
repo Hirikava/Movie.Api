@@ -9,17 +9,32 @@
     </div>
     <div>
         <h2>Registration</h2>
-        <input type="text" id="userName" size="20" />
-        <input type="text" id="userPassword" size="20" />
-        <input type="button" value="Register" onclick="Register();" />
-        <p id="movie" />
-</div>
+        <div>
+            <label>Login:</label>
+            <input type="text" id="userName" size="20" text-align:right />
+        </div>
+        
+        <div>
+            <label>Password:</label>
+            <input type="password" id="userPassword" size="20" />
+        </div>
+        <div>
+            <label>Password again:</label>
+            <input type="password" id="userPasswordRepeat" size="20" />
+        </div>
+        <input type="button" value="Зарегистрироваться" onclick="Register();" />
+        <p id="warnings" ></p> 
+    </div>
 
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script type="text/javascript">
 
     function Register() {
+
+        if (!validation())
+            return;
+
         var data = {
             "UserName": $('#userName').val(),
             "PasswordHash": $('#userPassword').val()
@@ -38,11 +53,50 @@
 
     function successFunc(data, status) {
         alert(data.Sid);
-        location.href = "HomePage.html";
+        //location.href = "HomePage.html";
     }
 
     function errorFunc(jqXHR) {
         alert(jqXHR.responseText);
+    }
+
+    function validation() {
+
+        $('#warnings').html("")
+        //username validation
+        var userName = $('#userName').val();
+        if (userName == "") {
+            $('#warnings').html("Имя пользователя не должно быть пустым!")
+            return false
+        }
+        var usernameRegex = /^[a-zA-Z0-9]+$/;
+        if (!userName.match(usernameRegex)) {
+            $('#warnings').html("Имя пользователя не должно содержать только буквы латинского алфавита и цифры от 0-9.");
+            return false;
+        }
+        if (userName.length < 3 || userName > 20) {
+            $('#warnings').html("Имя пользователя должно быть от 4 до 20 символов в длинну.");
+            return false;
+        }
+
+        //password validation
+        var password = $('#userPassword').val();
+        var passwordRepeat = $('#userPasswordRepeat').val();
+
+        if (password == "") {
+            $('#warnings').html("Пароль не может быть пустым")
+            return false
+        }
+        if (password != passwordRepeat) {
+            $('#warnings').html("Пароли не совпадают :(");
+            return false;
+        }
+        if (password.length < 4 || password.length > 20) {
+            $('#warnings').html("Пароли должен быть от 4 до 20 символов в длинну");
+            return false;
+        }
+
+        return true;
     }
 </script>
 </body>
