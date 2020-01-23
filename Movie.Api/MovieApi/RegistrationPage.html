@@ -57,8 +57,8 @@
             document.cookie = "UserName=" + data.UserName;
             location.href = "HomePage.html";
         }
-        if (data.STATUS_CODES == "1") {
-            $('#warnings').html("Имя пользователя уже занято");
+        if (data.Status == "1") {
+            $('#warnings').html("Имя пользователя уже занято !");
         }
         
     }
