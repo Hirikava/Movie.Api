@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Product App</title>
+    <title>ZmihCinema</title>
 </head>
 <body>
-
-<div>
-    <h2>All MoviesToday</h2>
-    <p id="userIdentity"></p>
-    <ul id="movies" />
-</div>
-<div>
-    <h2>Search by ID</h2>
-    <input type="text" id="prodId" size="5" />
-    <input type="button" value="Search" onclick="find();" />
-    <p id="movie" />
-</div>
+    <div>
+        <p id="userIdentity"></p>
+    </div>
 
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 <script>
     var uri = 'v1/movies';
 
-    $(document).ready(function () {
-        // Send an AJAX request
-        if (getCookie("sid")) {
-
-        } else {
-            $('<a>', {text: "войти или зарегистрироваться", href : "RegistrationPage.html"}).appendTo($('#userIdentity'));
+    $(document).ready(function() {
+        if (getCookie("AuthSID") === "") {
+            $('<a>', { text: "войти или зарегистрироваться", href: "RegistrationPage.html" }).appendTo($('#userIdentity'));
+        }
+        else {
+            $('<a>', { text: "Вы акторизованы, как: " + getCookie("UserName"),  }).appendTo($('#userIdentity'));
         }
     });
 
-    function getCookie(name) {
-        var matches = document.cookie.match(new RegExp(
-            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
+
+    function getCookie(c_name) {
+        
+        if (document.cookie.length > 0) {
+            var c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                var c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
     }
 </script>
 </body>
