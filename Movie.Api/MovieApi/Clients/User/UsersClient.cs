@@ -24,7 +24,7 @@ namespace Movie.Api.Clients
             using (var connection = dataBaseConnectionProvider.GetConnection())
             {
                 connection.Open();
-                var command = new SqlCommand($"SELECT * FROM Users WHERE userName = '{userName}'",connection);
+                var command = new SqlCommand($"SELECT * FROM Users WHERE UserName = '{userName}'",connection);
                 var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
                 var result = reader.HasRows;
                 reader.Close();

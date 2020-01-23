@@ -23,7 +23,7 @@ namespace Movie.Api.Clients.Sessions
             {
                 connection.Open();
                 var newSessionId = Guid.NewGuid();
-                var command = new SqlCommand("",connection);
+                var command = new SqlCommand($"INSERT INTO USessions VALUES('{newSessionId.ToString()}','{userId.ToString()}')",connection);
                 await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                 return newSessionId;
             }
