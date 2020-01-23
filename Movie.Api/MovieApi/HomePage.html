@@ -10,11 +10,11 @@
 
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 <script>
-    var uri = 'v1/movies';
 
     $(document).ready(function() {
         if (getCookie("AuthSID") === "") {
-            $('<a>', { text: "войти или зарегистрироваться", href: "RegistrationPage.html" }).appendTo($('#userIdentity'));
+            $('<a>', { text: "войти" , href: "LogInPage.html" }).appendTo($('#userIdentity'));
+            $('<a>', { text: " или зарегистрироваться" , href: "RegistrationPage.html" }).appendTo($('#userIdentity'));
         }
         else {
             $('<a>', { text: "Вы акторизованы, как: " + getCookie("UserName"),  }).appendTo($('#userIdentity'));
@@ -36,6 +36,12 @@
             }
         }
         return "";
+    }
+
+    function logOut() {
+        document.cookie = "AuthSID=";
+        document.cookie = "UserName=";
+        location.href = "HomePage.html";
     }
 </script>
 </body>

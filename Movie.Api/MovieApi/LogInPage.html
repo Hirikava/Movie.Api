@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Вход</title>
+</head>
+<body>
+
+	<div>
+	</div>
+	<div>
+		<h2>Log In</h2>
+		<div>
+			<label>Login:</label>
+			<input type="text" id="userName" size="20" text-align:right />
+		</div>
+
+		<div>
+			<label>Password:</label>
+			<input type="password" id="userPassword" size="20" />
+		</div>
+        <input type="button" value="Войти" onclick="LogIn();" />
+		<p id="warnings"></p>
+	</div>
+
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script type="text/javascript">
+
+        function LogIn() {
+            var data = {
+                "UserName": $('#userName').val(),
+                "PasswordHash": ($('#userPassword').val())
+            };
+            $.ajax({
+                type: "POST",
+                url: "v1/auth/log-in",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: successFunc,
+                error: errorFunc
+            });
+        }
+        function errorFunc(jqXHR) {
+            alert(jqXHR.responseText);
+        }
+
+        function successFunc(data, status) {
+            if (data.Status == "0") {
+                document.cookie = "AuthSID=" + data.Sid;
+                document.cookie = "UserName=" + $('#userName').val();
+                location.href = "HomePage.html";
+            }
+            if (data.Status == "1") {
+                $('#warnings').html("Не правильные имя пользователя или пароль!");
+            }
+        
+        }
+
+	</script>
+</body>
+</html>

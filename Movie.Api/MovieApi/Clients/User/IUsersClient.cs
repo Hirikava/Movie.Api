@@ -10,5 +10,6 @@ namespace Movie.Api.Clients
     {
         Task<bool> IsUserNameExists(string userName);
         Task<Guid> RegisterNewUserAsync(string userName, string passwordHash);
+        Task<Guid?> GetUserIdByCredetinals(string userName, string passwordHash);
     }
 }

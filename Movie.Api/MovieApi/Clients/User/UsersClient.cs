@@ -43,5 +43,23 @@ namespace Movie.Api.Clients
                 return newUserId;
             }
         }
+
+        public async Task<Guid?> GetUserIdByCredetinals(string userName, string passwordHash)
+        {
+            using (var connection = dataBaseConnectionProvider.GetConnection())
+            {
+                connection.Open();
+                var command = new SqlCommand($"SELECT * FROM Users WHERE UserName = '{userName}' AND UserPasswordHash ='{passwordHash}'", connection);
+                var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+                
+                if (!reader.HasRows)
+                    return null;
+
+                reader.Read();
+                var value = new Guid(reader.GetString(0));
+                reader.Close();
+                return value;
+            }
+        }
     }
 }

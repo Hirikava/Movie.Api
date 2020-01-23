@@ -8,6 +8,7 @@ using System.Web.Http.Filters;
 using Movie.Api.Clients;
 using Movie.Api.Clients.Sessions;
 using MovieApi.ClientModels.Authorization;
+using MovieApi.ClientModels.Authorization.LogIn;
 
 namespace Movie.Api.Controllers
 {
@@ -25,7 +26,7 @@ namespace Movie.Api.Controllers
         }
 
         [HttpPost]
-        [Route("")]
+        [Route("registration")]
         public async Task<RegistrationResponse> RegisterNewUser([FromBody] RegistrationRequest registrationRequest)
         {
             if (await usersClient.IsUserNameExists(registrationRequest.UserName).ConfigureAwait(false))
@@ -42,7 +43,26 @@ namespace Movie.Api.Controllers
                 Status = RegistrationStatus.Registred,
                 Sid = newSessionId.ToString(),
                 UserName = registrationRequest.UserName
-        };
+            };
+        }
+
+        [HttpPost]
+        [Route("log-in")]
+        public async Task<LogInResponse> LogIn([FromBody] LogInRequest logInRequest)
+        {
+            var uId = await usersClient.GetUserIdByCredetinals(logInRequest.UserName,logInRequest.PasswordHash).ConfigureAwait(false);
+            if (!uId.HasValue)
+                return new LogInResponse()
+                {
+                    Status = LogInStatus.UserNameOrPasswprdIncorrect,
+                };
+
+            var newSid = await sessionsClient.CreateSessionOnUser(uId.Value).ConfigureAwait(false);
+            return new LogInResponse()
+            {
+                Status = LogInStatus.LogedIn,
+                Sid = newSid.ToString()
+            };
         }
     }
 }

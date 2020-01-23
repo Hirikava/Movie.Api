@@ -98,6 +98,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="HomePage.html" />
+    <Content Include="LogInPage.html" />
     <Content Include="RegistrationPage.html" />
     <Content Include="Web.config" />
   </ItemGroup>
