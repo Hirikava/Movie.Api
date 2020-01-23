@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Filters;
 using Movie.Api.Clients;
+using Movie.Api.Clients.Sessions;
 using MovieApi.ClientModels.Authorization;
 
 namespace Movie.Api.Controllers
@@ -15,10 +16,12 @@ namespace Movie.Api.Controllers
     {
 
         private readonly IUsersClient usersClient;
+        private readonly ISessionsClient sessionsClient;
 
-        public AuthorizationController(IUsersClient usersClient)
+        public AuthorizationController(IUsersClient usersClient, ISessionsClient sessionsClient)
         {
             this.usersClient = usersClient;
+            this.sessionsClient = sessionsClient;
         }
 
         [HttpPost]
@@ -32,11 +35,12 @@ namespace Movie.Api.Controllers
                 };
 
             var newUserId = await usersClient.RegisterNewUserAsync(registrationRequest.UserName,registrationRequest.PasswordHash).ConfigureAwait(false);
+            var newSessionId = await sessionsClient.CreateSessionOnUser(newUserId).ConfigureAwait(false);
 
             return new RegistrationResponse()
             {
                 Status = RegistrationStatus.Registred,
-                Sid = newUserId.ToString()
+                Sid = newSessionId.ToString(),
         };
         }
     }
