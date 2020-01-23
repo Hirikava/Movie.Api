@@ -8,6 +8,5 @@ namespace MovieApi.ClientModels.Authorization
     {
         Registred,
         UserAlreadyExists,
-        IncorrectUserName,
     }
 }

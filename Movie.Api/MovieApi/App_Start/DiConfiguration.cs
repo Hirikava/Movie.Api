@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
+using Movie.Api.Clients;
 using Movie.Api.Providers.DataBase;
 
 namespace Movie.Api.App_Start
@@ -21,6 +22,10 @@ namespace Movie.Api.App_Start
 
             builder.Register(c => new DataBaseConnectionProvider("localhost", "movie.api", "TheDAX", "QWERTY12345"))
                 .As<IDataBaseConnectionProvider>()
+                .InstancePerRequest();
+
+            builder.Register(c => new UsersClient(c.Resolve<IDataBaseConnectionProvider>()))
+                .As<IUsersClient>()
                 .InstancePerRequest();
 
             
