@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Product App</title>
+    <title>Регистрация</title>
 </head>
 <body>
 
@@ -37,7 +37,7 @@
 
         var data = {
             "UserName": $('#userName').val(),
-            "PasswordHash": $('#userPassword').val()
+            "PasswordHash": ($('#userPassword').val())
         };
         $.ajax({
             type: "POST",
@@ -45,15 +45,22 @@
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: successFunc,
+            success: successRegFunc,
             error: errorFunc
 
         });
     }
 
-    function successFunc(data, status) {
-        alert(data.Status);
-        //location.href = "HomePage.html";
+    function successRegFunc(data, status) {
+        if (data.Status == "0") {
+            document.cookie = "AuthSID=" + data.Sid;
+            document.cookie = "UserName=" + data.UserName;
+            location.href = "HomePage.html";
+        }
+        if (data.STATUS_CODES == "1") {
+            $('#warnings').html("Имя пользователя уже занято");
+        }
+        
     }
 
     function errorFunc(jqXHR) {

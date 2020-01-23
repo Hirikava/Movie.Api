@@ -8,5 +8,6 @@ namespace MovieApi.ClientModels.Authorization
     {
         public RegistrationStatus Status { get; set; }
         public string Sid { get; set; } 
+        public string UserName { get; set; }
     }
 }

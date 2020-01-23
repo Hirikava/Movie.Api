@@ -41,6 +41,7 @@ namespace Movie.Api.Controllers
             {
                 Status = RegistrationStatus.Registred,
                 Sid = newSessionId.ToString(),
+                UserName = registrationRequest.UserName
         };
         }
     }
