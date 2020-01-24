@@ -72,5 +72,21 @@ namespace Movie.Api.Clients.Movies
                 return seats;
             }
         }
+
+        public async Task<bool> PatchSeat(int movieId, int seatId, string userId)
+        {
+            using (var connection = dataBaseConnectionProvider.GetConnection())
+            {
+                connection.Open();
+                var checkCommand = new SqlCommand($"SELECT * FROM Registrations WHERE MovieId ={ movieId } AND SeatNumber = {seatId}",connection);
+                var checkResult = await checkCommand.ExecuteReaderAsync();
+                if (checkResult.HasRows)
+                    return false;
+                checkResult.Close();
+                var insertCommand = new SqlCommand($"INSERT INTO Registrations VALUES ('{userId}',{movieId},{seatId})", connection);
+                var result = (await insertCommand.ExecuteNonQueryAsync().ConfigureAwait(false));
+                return true;
+            }
+        }
     }
 }

@@ -14,7 +14,8 @@
 <div>
     <ul id="movies">
     </ul>
-    <div style="height: 400px; width: 400px; background-color: powderblue">
+    <div style="height: 200px; width: 400px; background-color: powderblue">
+        <p id="seats"></p>
     </div>
 </div>
 
@@ -33,6 +34,7 @@
 
 
     function getMovies() {
+        $('#movies').html("");
         $.ajax({
             type: "GET",
             url: "v1/movies?date=" + $('#dateTimePicker').val(),
@@ -48,6 +50,7 @@
         function successFunc(data, status) {
             $.each(data.Movies,
                 function (key, item) {
+
                     var button = document.createElement("input");
                     button.type = "button";
                     button.value = formatItem(item);
@@ -68,6 +71,7 @@
     }
 
     function getSeats(movieId) {
+        $('#seats').html("");
         $.ajax({
             type: "GET",
             url: "v1/movies/" + movieId +"/seats",
@@ -81,11 +85,63 @@
         });
 
         function successFunc(data, status) {
-            alert(data.Seats.length);
+            $.each(data.Seats,
+                function (key, item) {
+                    var button = document.createElement("input");
+                    button.type = "button";
+                    button.value = item.SeatNumber;
+                    button.style.width = "40px";
+                    button.style.height = "40px";
+                    //handler
+                    if (item.SeatStatus == "0") {
+                        button.onclick = function () {
+                        patchSeats(data.MovieId, item.SeatNumber);
+                    }}
+                    if (item.SeatStatus == "1") {
+                        button.style.backgroundColor = "red";
+                    }
+                    if (item.SeatStatus == "2") {
+                        button.style.backgroundColor = "green";}
+                    $('#seats').append(button);
+                });
         }
 
         function errorFunc(jqXHR) {
         }
+    }
+
+    function patchSeats(movieId, seatNumber) {
+        if (getCookie("AuthSID") === "") {
+            alert("войдите или зарегистрируйтесь!");
+            return;
+        }
+
+        $.ajax({
+            type: "PATCH",
+            url: "v1/movies/" + movieId +"/seats",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(seatNumber),
+            headers: {
+                "Authorization" : getCookie("AuthSID")
+            },
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data,status) {
+            
+        }
+
+        function errorFunc(jqXHR) {
+            if (jqXHR.status == 201) {
+                alert("Место успешно забранированно!");
+            }
+            if (jqXHR.status == 409) {
+                alert("Место кто-то занял!");
+            }
+        }
+        
     }
 
 

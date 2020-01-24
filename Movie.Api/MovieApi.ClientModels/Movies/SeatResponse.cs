@@ -6,6 +6,7 @@ namespace MovieApi.ClientModels.Movies
 {
     public class SeatResponse
     {
-        public IEnumerable<Seat> Seats;
+        public IEnumerable<Seat> Seats { get; set; }
+        public int MovieId { get; set; }
     }
 }

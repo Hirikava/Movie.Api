@@ -10,5 +10,7 @@ namespace Movie.Api.Clients.Movies
         Task<IEnumerable<int>> GetClosedSeats(int movieId);
 
         Task<IEnumerable<int>> GetYourSeats(int movieId, string userId);
+
+        Task<bool> PatchSeat(int movieId, int seatId, string userId);
     }
 }
