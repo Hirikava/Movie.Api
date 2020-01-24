@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Movie.Api.Clients;
+using Movie.Api.Clients.Movies;
 using Movie.Api.Clients.Sessions;
+using Movie.Api.Providers.Authorization;
 using Movie.Api.Providers.DataBase;
 
 namespace Movie.Api.App_Start
@@ -20,6 +23,7 @@ namespace Movie.Api.App_Start
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             //DI Registrations here
+            builder.RegisterHttpRequestMessage(GlobalConfiguration.Configuration);
 
             builder.Register(c => new DataBaseConnectionProvider("localhost", "movie.api", "TheDAX", "QWERTY12345"))
                 .As<IDataBaseConnectionProvider>()
@@ -31,6 +35,17 @@ namespace Movie.Api.App_Start
 
             builder.Register(c => new SessionsClient(c.Resolve<IDataBaseConnectionProvider>()))
                 .As<ISessionsClient>()
+                .InstancePerRequest();
+
+            builder.Register(c => new MovieClient(c.Resolve<IDataBaseConnectionProvider>()))
+                .As<IMovieClient>()
+                .InstancePerRequest();
+
+            builder.Register(c =>
+                {
+                    var authHeader = c.Resolve<HttpRequestMessage>().Headers.Authorization?.ToString();
+                    return new SessionAuthorizationProvider(c.Resolve<IDataBaseConnectionProvider>(), authHeader);
+                }).As<IAuthorizationProvider>()
                 .InstancePerRequest();
             //
 

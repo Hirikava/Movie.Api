@@ -4,9 +4,19 @@
     <title>ZmihCinema</title>
 </head>
 <body>
-    <div>
-        <p id="userIdentity"></p>
+<div>
+    <p id="userIdentity"></p>
+</div>
+<div>
+    <input type="date" id="dateTimePicker"/>
+    <input type="button", value="Показать сеансы" onclick=" getMovies();"/>
+</div>
+<div>
+    <ul id="movies">
+    </ul>
+    <div style="height: 400px; width: 400px; background-color: powderblue">
     </div>
+</div>
 
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 <script>
@@ -20,6 +30,63 @@
             $('<a>', { text: "Вы акторизованы, как: " + getCookie("UserName"),  }).appendTo($('#userIdentity'));
         }
     });
+
+
+    function getMovies() {
+        $.ajax({
+            type: "GET",
+            url: "v1/movies?date=" + $('#dateTimePicker').val(),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            headers: {
+                "Authorization" : getCookie("AuthSID")
+            },
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            $.each(data.Movies,
+                function (key, item) {
+                    var button = document.createElement("input");
+                    button.type = "button";
+                    button.value = formatItem(item);
+                    button.onclick = function() {
+                        getSeats(item.Id);
+                    }
+                    $('#movies').append(button);
+                });
+
+            function formatItem(item) {
+                return item.FilmName + " " + item.Time;
+            }
+        }
+
+        function errorFunc(jqXHR) {
+            alert(jqXHR.responseText);
+        }
+    }
+
+    function getSeats(movieId) {
+        $.ajax({
+            type: "GET",
+            url: "v1/movies/" + movieId +"/seats",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            headers: {
+                "Authorization" : getCookie("AuthSID")
+            },
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            alert(data.Seats.length);
+        }
+
+        function errorFunc(jqXHR) {
+        }
+    }
 
 
     function getCookie(c_name) {
